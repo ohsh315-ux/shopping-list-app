@@ -210,7 +210,7 @@
         const SUPABASE_URL = 'https://eunrdlrkjvkrkssxyfjn.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bnJkbHJranZrcmtzc3h5ZmpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcwOTczODUsImV4cCI6MjA4MjY3MzM4NX0.Gk-YyXderxXrUYYjOTmu4fuL6fbYN9LNE4p4iPBQ_CI';
 
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const itemInput = document.getElementById('itemInput');
         const addBtn = document.getElementById('addBtn');
@@ -222,7 +222,7 @@
 
         // Supabase에서 아이템 로드
         async function loadItems() {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('shopping_item')
                 .select('*')
                 .order('created_at', { ascending: true });
@@ -275,7 +275,7 @@
         async function addItem() {
             const text = itemInput.value.trim();
             if (text) {
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('shopping_item')
                     .insert([{ text, checked: false }])
                     .select();
@@ -297,7 +297,7 @@
             if (!item) return;
 
             const newChecked = !item.checked;
-            const { error } = await supabase
+            const { error } = await supabaseClient
                 .from('shopping_item')
                 .update({ checked: newChecked })
                 .eq('id', id);
@@ -312,7 +312,7 @@
         }
 
         async function deleteItem(id) {
-            const { error } = await supabase
+            const { error } = await supabaseClient
                 .from('shopping_item')
                 .delete()
                 .eq('id', id);
